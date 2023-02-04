@@ -765,6 +765,8 @@ export const catalogos_servicos = [
         "cswGetCapabilities": "https://metadados.inde.gov.br/geonetwork/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
         }
     ]
+    
+    
     export const catalogos_csw = [
         {
             "descricao": "ANA - Agência Nacional de Águas e Saneamento Básico",

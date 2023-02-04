@@ -7,7 +7,10 @@ export async function  fetchDataByPost(url: string, body: string, content_type: 
     } catch (error) {
         try {
             let data = {url: url, body: body, content_type: content_type}
-            const res = await fetch( '/api/request-by-post/', { method: "POST", body: JSON.stringify(data), headers: {"Content-type": content_type}})    
+            
+            let nBody = JSON.stringify(data)
+            
+            const res = await fetch( '/api/get-records-by-post', { method: "POST", body: nBody})    
             if (!res.ok)
                 throw res;
             return res 

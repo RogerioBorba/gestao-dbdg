@@ -4,7 +4,7 @@
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte';
     import { fetchData } from "$lib/request/requestData";
-    import { textXml2Json } from '$lib/xml-json/xml2Json';
+    import { textXml2Json } from '$lib/xml_json/xml2Json';
 	import { fetchDataByPost } from '$lib/request/requestDataByPost';
     export let idDescricaoIriNoCentralCategoria
     let postRecordsParams = `<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="hits" startPosition="1" maxRecords="1" outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><csw:CqlText>_cat='${idDescricaoIriNoCentralCategoria.noCentralCategoria}'</csw:CqlText></csw:Constraint></csw:Query></csw:GetRecords>`
@@ -20,7 +20,7 @@
     onMount(async () => {
         const index = idDescricaoIriNoCentralCategoria.iri.indexOf('?')
         let url = idDescricaoIriNoCentralCategoria.iri.substring(0, index)
-		console.log("url: ", url)
+		
         try {
             let res
             if(idDescricaoIriNoCentralCategoria.noCentralCategoria) {

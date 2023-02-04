@@ -3,7 +3,7 @@ import { error } from '@sveltejs/kit';
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
     const an_url = url.search.substring(5);
-    if (!an_url) throw error(400, 'O parâmetro url não não consta na requisição');
+    if (!an_url) throw error(400, 'O parâmetro url não consta na requisição');
     try {
         console.log("Entrei na api/get-xml")
         const response = await fetch(an_url, { method: "GET",  headers: {"Content-type": 'application/xml'}})
