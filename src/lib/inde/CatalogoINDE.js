@@ -80,13 +80,13 @@ export const catalogos_servicos = [
     {
     "descricao": "CMR/Funai - Centro de Monitoramento Remoto ",
     "sigla": "CMR/Funai",
-    "url": "http://cmr.funai.gov.br/geoserver/ows",
+    "url": "https://cmr.funai.gov.br/geoserver/ows",
     "wmsAvailable": true,
     "wfsAvailable": true,
     "wcsAvailable": true,
-    "wmsGetCapabilities": "http://cmr.funai.gov.br/geoserver/ows?service=wms&request=GetCapabilities&version=1.3.0",
-    "wfsGetCapabilities": "http://cmr.funai.gov.br/geoserver/ows?service=wfs&request=GetCapabilities&version=1.3.0",
-    "wcsGetCapabilities": "http://cmr.funai.gov.br/geoserver/ows?service=wcs&request=GetCapabilities&version=1.3.0",
+    "wmsGetCapabilities": "https://cmr.funai.gov.br/geoserver/ows?service=wms&request=GetCapabilities&version=1.3.0",
+    "wfsGetCapabilities": "https://cmr.funai.gov.br/geoserver/ows?service=wfs&request=GetCapabilities&version=1.3.0",
+    "wcsGetCapabilities": "https://cmr.funai.gov.br/geoserver/ows?service=wcs&request=GetCapabilities&version=1.3.0",
     "url_metadados": null,
     "cswGetCapabilities": null
     },
