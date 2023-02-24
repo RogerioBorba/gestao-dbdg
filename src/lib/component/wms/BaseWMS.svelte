@@ -29,11 +29,13 @@
     async function fetchListWMSLayer() {
         //const res = await fetch(selected.iri);
         let wms_capabilities =  await getWMSCapabilitiesObject(selectedIDTextIRI)
+        
         if(!wms_capabilities) throw error(500, `Não foi possível realizar a requisição: ${selectedIDTextIRI}`)
-        let layers = wms_capabilities.layerObjects()
+        let layers = wms_capabilities.layerObjects() 
         let i = 1
+        console.log("layers: ", layers)
         wmsLayers = layers.map(layer => new WMSLayer(layer, i++, null))
-        return 1
+        return wmsLayers.length
     }
 
     async function btnSearchClicked() {
@@ -96,7 +98,10 @@
     {#await promise}
         <p class = "text-xl text-center text-blue-600 animate-pulse">...aguarde</p>
     {:then layers}
-        <input class="w-full h-8 pl-3 pr-8 text-base placeholder-gray-600 border rounded-lg focus: outline-none" hidden={wmsLayers.length == 0 ?true:false} type="text" placeholder="Digite para filtrar" bind:value={textEntered} title="Filtro">
+       {#if layers == 0}
+            <p class="text-blue-800 text-lg p-1">Não há camadas!</p>
+       {/if}    
+       <input class="w-full h-8 pl-3 pr-8 text-base placeholder-gray-600 border rounded-lg focus: outline-none" hidden={wmsLayers.length == 0 ?true:false} type="text" placeholder="Digite para filtrar" bind:value={textEntered} title="Filtro">
     {#each wmsLayersFiltered as layer}
         <WMSCapabilityLayer wmsLayer={layer} capabilitiesUrl= {selectedIDTextIRI.iri}></WMSCapabilityLayer>
     {/each}    

@@ -8,7 +8,7 @@
     //import LeafletMap from '$lib/component/leaflet/leafletMap.svelte';
     
 </script>
-<Sidebar>
+<Sidebar home='Home'>
     <ExpansionPanel header={"Camada base"}>
 		<span slot='svg'>
 		  <svg  class=" text-blue-400 fill-current h-6 w-6" viewBox="0 0 24 24">

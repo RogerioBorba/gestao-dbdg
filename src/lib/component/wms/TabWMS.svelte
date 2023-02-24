@@ -7,6 +7,7 @@
 <Tabs style="underline">
     <TabItem open title='Por instituição'>
         <BaseWMS></BaseWMS>
+        
     </TabItem>
     <TabItem title='Por nome ou título ou palavra chave'>
         <!--<WMSSearchByNTK></WMSSearchByNTK>-->

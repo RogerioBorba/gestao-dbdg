@@ -726,6 +726,16 @@ export const catalogos_servicos = [
     "cswGetCapabilities": "http://geonetwork.pbh.gov.br/geonetwork/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
     },
     {
+        "descricao": "Prefeitura de Cabo Frio (RJ)",
+        "url": "https://geoservicos.inde.gov.br/geoserver/RJPCaboFrio/ows",
+        "wmsAvailable": true,
+        "wfsAvailable": true,
+        "wcsAvailable": true,
+        "wmsGetCapabilities": "https://geoservicos.inde.gov.br/geoserver/RJPCaboFrio/ows?service=wms&request=GetCapabilities&version=1.3.0",
+        "wfsGetCapabilities": "https://geoservicos.inde.gov.br/geoserver/RJPCaboFrio/ows?service=wfs&request=GetCapabilities&version=2.0.0",
+        "wcsGetCapabilities": "https://geoservicos.inde.gov.br/geoserver/RJPCaboFrio/ows?service=wcs&request=GetCapabilities&version=1.1.0"
+    },
+    {
     "descricao": "Prefeitura de Juazeiro do Norte (CE)",
     "sigla": "PJN",
     "url": "https://geoservicos.inde.gov.br/geoserver/CEPJuazeiroNorte/ows",
@@ -763,7 +773,7 @@ export const catalogos_servicos = [
         "wcsGetCapabilities": "https://geoservicos.inde.gov.br/geoserver/SCSJFMADS/ows?service=wcs&request=GetCapabilities&version=1.3.0",
         "url_metadados": "https://metadados.inde.gov.br/geonetwork",
         "cswGetCapabilities": "https://metadados.inde.gov.br/geonetwork/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
-        }
+    }
     ]
     
     
