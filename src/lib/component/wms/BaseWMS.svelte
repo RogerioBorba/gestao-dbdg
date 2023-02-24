@@ -32,8 +32,9 @@
         
         if(!wms_capabilities) throw error(500, `Não foi possível realizar a requisição: ${selectedIDTextIRI}`)
         let layers = wms_capabilities.layerObjects() 
+        if (!layers)
+            return -1
         let i = 1
-        console.log("layers: ", layers)
         wmsLayers = layers.map(layer => new WMSLayer(layer, i++, null))
         return wmsLayers.length
     }
@@ -100,7 +101,9 @@
     {:then layers}
        {#if layers == 0}
             <p class="text-blue-800 text-lg p-1">Não há camadas!</p>
-       {/if}    
+        {:else if layers == -1}
+        <p class="text-red-800 text-lg p-1">Problema no xml retornado do GetCapabilities</p>
+        {/if}    
        <input class="w-full h-8 pl-3 pr-8 text-base placeholder-gray-600 border rounded-lg focus: outline-none" hidden={wmsLayers.length == 0 ?true:false} type="text" placeholder="Digite para filtrar" bind:value={textEntered} title="Filtro">
     {#each wmsLayersFiltered as layer}
         <WMSCapabilityLayer wmsLayer={layer} capabilitiesUrl= {selectedIDTextIRI.iri}></WMSCapabilityLayer>
