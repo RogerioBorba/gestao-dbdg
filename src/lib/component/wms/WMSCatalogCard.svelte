@@ -1,5 +1,7 @@
 <script>
-    import {countTotalLayer, countTotalLayerWithoutMetadata ,countWMSProcessado} from '$lib/store/storeWMS'
+    import {countTotalLayer, countTotalLayerWithoutMetadata ,countWMSProcessado, currentListWMSCapability} from '$lib/store/storeWMS'
+    import { goto } from '$app/navigation';
+
     import { Spinner} from 'flowbite-svelte';
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte';
@@ -19,7 +21,10 @@
     let spinMessage = 'processando ...';
     let requestGetRecordsTextOrError = '';
     
-    function linkClicked() {}
+    function linkClicked() {
+        currentListWMSCapability.set(wmsCapabilities)
+        goto("\capabilities")
+    }
     function initializeVariablesOnMount() {
         if (!wmsCapabilities) {
             return 
