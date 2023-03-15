@@ -1,6 +1,7 @@
 <script>
-    import {countMetadata, countProcessado} from '$lib/store/storeMetadata'
+    import {countMetadata, countProcessado, postURL} from '$lib/store/storeMetadata'
     import { Spinner} from 'flowbite-svelte';
+    import { goto } from '$app/navigation';
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte';
     import { fetchData } from "$lib/request/requestData";
@@ -16,7 +17,11 @@
     let spinMessage = 'processando ...'
     let requestGetRecordsTextOrError = ''
     
-    function linkClicked() {}
+    function linkClicked() {
+        $postURL = postRecordsParams
+        goto('/csw/metadados')
+    }
+
     onMount(async () => {
         const index = idDescricaoIriNoCentralCategoria.iri.indexOf('?')
         let url = idDescricaoIriNoCentralCategoria.iri.substring(0, index)
