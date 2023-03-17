@@ -17,15 +17,20 @@
     let spinMessage = 'processando ...'
     let requestGetRecordsTextOrError = ''
     
+    
     function linkClicked() {
-        $postURL = postRecordsParams
+        let str = idDescricaoIriNoCentralCategoria.iri;
+        let body = postRecordsParams.replace('resultType="hits"', 'resultType="results"')
+        body = body.replace('maxRecords="1"', 'maxRecords="1000000"')
+        str = str.substring(0, str.indexOf('?'))
+        $postURL = {url: str , body: body}
         goto('/csw/metadados')
     }
 
     onMount(async () => {
         const index = idDescricaoIriNoCentralCategoria.iri.indexOf('?')
         let url = idDescricaoIriNoCentralCategoria.iri.substring(0, index)
-		console.log("url: ", url)
+		
         try {
             let res
             if(idDescricaoIriNoCentralCategoria.noCentralCategoria) {
