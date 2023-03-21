@@ -10,6 +10,8 @@
        
         try {
             let res = await fetchDataByPost($postURL.url, $postURL.body,'application/xml')       
+            
+            console.log($postURL)
             let xmlText = await res.text()
             let xmlJsonObject = textXml2Json(xmlText)
             metadataObj = xmlJsonObject["csw:GetRecordsResponse"]["csw:SearchResults"]["gmd:MD_Metadata"]
