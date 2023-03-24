@@ -28,6 +28,7 @@
         let body = getBody()
         str = str.substring(0, str.indexOf('?'))
         $postURL = {url: str , body: body}
+    
         goto('/csw/metadados')
     }
 

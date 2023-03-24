@@ -1,7 +1,8 @@
 <script>
     import {  Tabs, TabItem} from 'flowbite-svelte';
-   // import WMSSearchByNTK from './WMSSearchByNTK.svelte'
+    import WMSSearchByNomeTitulo from './WMSSearchByNomeTitulo.svelte'
     import BaseWMS from './BaseWMS.svelte'  
+	import WmsSearchByPalavraChave from './WMSSearchByPalavraChave.svelte';
 </script>
     
 <Tabs style="underline">
@@ -9,7 +10,11 @@
         <BaseWMS></BaseWMS>
         
     </TabItem>
-    <TabItem title='Por nome ou título ou palavra chave'>
-        <!--<WMSSearchByNTK></WMSSearchByNTK>-->
+    <TabItem title='Por nome ou título'>
+        <WMSSearchByNomeTitulo></WMSSearchByNomeTitulo>
+        
+    </TabItem>
+    <TabItem title='Por palavra chave'>
+        <WmsSearchByPalavraChave></WmsSearchByPalavraChave>
     </TabItem>
 </Tabs>

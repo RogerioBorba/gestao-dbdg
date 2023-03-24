@@ -601,6 +601,18 @@ export class WMSCapabilities {
         return allKeywords
     }
 
+    wmsLayersFilteredByNameOrTitle(nameOrTitle, sourceLayer=null) {
+        let i = 1
+        let layers = this.layerObjects()
+        if (!layers)
+            return []
+        const wmsLayers =  layers.map(layerObj => new WMSLayer(layerObj, i++, sourceLayer))
+        return wmsLayers.filter(wmsLayer => 
+            (wmsLayer.title() && wmsLayer.title().toLowerCase().includes(nameOrTitle.toLowerCase())) ||
+            (wmsLayer.name() && wmsLayer.name().toLowerCase().includes(nameOrTitle.toLowerCase()))
+        )
+    }
+
     wmsLayersFilteredByNameOrTitleOrKeyword(nameOrTitleOrKeyword, sourceLayer=null) {
         let i = 1
         let layers = this.layerObjects()
@@ -612,6 +624,48 @@ export class WMSCapabilities {
             (wmsLayer.name() && wmsLayer.name().toLowerCase().includes(nameOrTitleOrKeyword.toLowerCase())) ||
             (wmsLayer.keywords() &&
               wmsLayer.keywords().toString().toLowerCase().includes(nameOrTitleOrKeyword.toLowerCase())))
+    }
+   
+    hasWMSLayerWithKeywords(keywordsObj) {
+        let ands = [];
+        let ors = [];
+        Object.entries(keywordsObj).forEach(([key, value]) => { key == 'and'? ands.push(value): ors.push(value)});
+
+    }
+    includesAll(array1, array2) {
+        if (array2.length == 0)
+            return true
+        for (let i = 0; i < array2.length; i++) {
+            if (!array1.toString().toLowerCase().includes(array2[i].toLowerCase())) 
+                return false;
+        }
+        return true;
+    }
+    includesAny(array1, array2) {
+        if (array2.length == 0)
+            return true
+        for (let i = 0; i < array2.length; i++) {
+            if (array1.toString().toLowerCase().includes(array2[i].toLowerCase())) 
+                return true;
+        }
+        return false;
+    }
+
+    wmsLayersFilteredByKeywords(keywordsArray) {
+        let i = 1
+        let ors = keywordsArray.filter((arr) => arr[0] == 'or').map((arr) => { return arr[1]})
+        let ands = keywordsArray.filter((arr) => arr[0] == 'and').map((arr) => { return arr[1]})
+        let layers = this.layerObjects()
+        if (!layers)
+            return []
+        const wmsLayers =  layers.map(layerObj => new WMSLayer(layerObj, i++, sourceLayer))
+        let wmsLayersFiltered = wmsLayers.filter(wmsLayer =>   
+            (wmsLayer.keywords() &&
+              this.includesAny(wmsLayer.keywords(), ors) &&
+              this.includesAll(wmsLayer.keywords(), ands)
+              ));
+        return wmsLayersFiltered
+        
     }
 }
 //module.exports=WMSCapabilities
