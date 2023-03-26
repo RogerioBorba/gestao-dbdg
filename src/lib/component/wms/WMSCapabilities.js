@@ -635,8 +635,10 @@ export class WMSCapabilities {
     includesAll(array1, array2) {
         if (array2.length == 0)
             return true
+        
+        let keywordListString = array1.toString().toLowerCase();
         for (let i = 0; i < array2.length; i++) {
-            if (!array1.toString().toLowerCase().includes(array2[i].toLowerCase())) 
+            if (!keywordListString.includes(array2[i].toLowerCase()))
                 return false;
         }
         return true;
@@ -644,26 +646,30 @@ export class WMSCapabilities {
     includesAny(array1, array2) {
         if (array2.length == 0)
             return true
+        let keywordListString = array1.toString().toLowerCase()  ;
+        
         for (let i = 0; i < array2.length; i++) {
-            if (array1.toString().toLowerCase().includes(array2[i].toLowerCase())) 
+            if (keywordListString.includes(array2[i].toLowerCase())) 
                 return true;
         }
         return false;
     }
 
-    wmsLayersFilteredByKeywords(keywordsArray) {
+    wmsLayersFilteredByKeywords(keywordsArray, sourceLayer=nully) {
         let i = 1
-        let ors = keywordsArray.filter((arr) => arr[0] == 'or').map((arr) => { return arr[1]})
-        let ands = keywordsArray.filter((arr) => arr[0] == 'and').map((arr) => { return arr[1]})
+        let ors = keywordsArray.filter((ikl) => ikl.logicalOperator == 'or').map((ikl) => { return ikl.keyword})
+        let ands = keywordsArray.filter((ikl) => ikl.logicalOperator == 'and').map((ikl) => { return ikl.keyword})
         let layers = this.layerObjects()
         if (!layers)
             return []
         const wmsLayers =  layers.map(layerObj => new WMSLayer(layerObj, i++, sourceLayer))
+        
         let wmsLayersFiltered = wmsLayers.filter(wmsLayer =>   
             (wmsLayer.keywords() &&
               this.includesAny(wmsLayer.keywords(), ors) &&
               this.includesAll(wmsLayer.keywords(), ands)
               ));
+              
         return wmsLayersFiltered
         
     }

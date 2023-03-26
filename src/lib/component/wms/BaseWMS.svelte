@@ -35,6 +35,7 @@
         if (!layers)
             return -1
         let i = 1
+        console.log("Layers: ", layers)
         wmsLayers = layers.map(layer => new WMSLayer(layer, i++, null))
         return wmsLayers.length
     }

@@ -25,7 +25,6 @@
         const text = await res.text()
         //console.log(text)
         const textJson = textXml2Json(text)
-        console.log(textJson)
         // alert(textJson)   
     }
     
@@ -38,7 +37,8 @@
 
     function btnAddLayerClicked() {
         let z_index = $selectedLayers.length + 1
-        
+        if(!wmsLayer.name())
+            return alert("Esta é uma camada de agrupamento. Apenas as camadas interiores podem ser exibidas!")
         source = L.tileLayer.wms(url(), {layers: wmsLayer.name(),format: 'image/png',transparent: true, zIndex: z_index });
         source.addTo($map)
         wmsLayer.sourceLayer = source

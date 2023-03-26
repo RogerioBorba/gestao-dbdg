@@ -29,22 +29,22 @@
         return { id: i++, text: obj.descricao, iri: obj.wmsGetCapabilities }
     }
 
-    async function capabilityObject(url) {
-        let wmsCapabilities = await getWMSCapabilitiesObject(url)
+    async function capabilityObject(idTextIRI) {
+        let wmsCapabilities = await getWMSCapabilitiesObject(idTextIRI)
         //$currentListWMSCapability = [...$currentListWMSCapability, result]
         qtdRequest++;
         if (!wmsCapabilities)
-            return 
-        let arrLayers = wmsCapabilities.wmsLayersFilteredByNameOrTitle(nameTile)
+            return console.log(`A requisição ${idTextIRI} falhou.`)
+        let arrLayers = wmsCapabilities.wmsLayersFilteredByNameOrTitle(nameTile, idTextIRI.iri)
         arrWMSLayers  = arrWMSLayers.concat(arrLayers)
         
     }
 
     async function btnSearchClicked() {
         //console.log(selectedItems)
-        selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
-        //let promisesCapabilityObject = selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
-        //await Promise.all(promisesCapabilityObject).then( alert("Processo finalizado")).catch((error) => {console.error(error.message);});
+        //selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
+        let promisesCapabilityObject = selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
+        await Promise.all(promisesCapabilityObject).then().catch((error) => {console.error(error.message);});
     }
 
     $: if (selectedItems.length > 0) {

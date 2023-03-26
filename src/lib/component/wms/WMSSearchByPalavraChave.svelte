@@ -34,37 +34,40 @@
         return { id: i++, text: obj.descricao, iri: obj.wmsGetCapabilities }
     }
 
-    async function capabilityObject(url) {
-        let wmsCapabilities = await getWMSCapabilitiesObject(url)
+    async function capabilityObject(idTextIRI) {
+        let wmsCapabilities = await getWMSCapabilitiesObject(idTextIRI)
         //$currentListWMSCapability = [...$currentListWMSCapability, result]
         qtdRequest++;
         if (!wmsCapabilities)
-            return 
-        let arrLayers = wmsCapabilities.wmsLayersFilteredByKeywords(nameTile)
+            return console.log(`A requisição ${idTextIRI.iri} falhou.`);
+        let arrLayers = wmsCapabilities.wmsLayersFilteredByKeywords(keywords, idTextIRI.iri)
+       
         arrWMSLayers  = arrWMSLayers.concat(arrLayers)
         
     }
 
     function removeKeyword(id) {
-        console.log("index: ", id)
         keywords = keywords.filter((key) => key.id != id );
     }
 
     async function addKeyword() {
-        console.log(logicalOperator)
         let obj = {keyword: keyword, logicalOperator: logicalOperator, id: (keywords.length + 1)}
-        keywords = [...keywords, obj]
+        keywords = [...keywords, obj];
+        keyword = ''
         
     }
 
     async function btnSearchClicked() {
-        //console.log(selectedItems)
+        
         //selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
-        //let promisesCapabilityObject = selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
-        //await Promise.all(promisesCapabilityObject).then( alert("Processo finalizado")).catch((error) => {console.error(error.message);});
+        let promisesCapabilityObject = selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
+        await Promise.all(promisesCapabilityObject).then( ).catch((error) => {console.error(error.message);});
+        if (arrWMSLayers.length == 0)
+            alert("Não há camadas para esta pesquisa");
+        
     }
 
-    $: if (keyword.length > 0) {
+    $: if (selectedItems.length > 0) {
             colorBtnAdd ="green"
             bgColorBtnAdd = "bg-gray-300"
             disableButtonRealizarRequest = false

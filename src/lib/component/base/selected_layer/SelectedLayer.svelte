@@ -8,7 +8,7 @@
         layer.remove()
     }
     function getLegendGraphicURLByLink() {
-        console.log(layer)
+        
         let url = layer.wmsLayerCapability.link.substring(0, layer.wmsLayerCapability.link.indexOf('?') + 1)
         return `${url}SERVICE=WMS&REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=${layer.name()}`
     }
@@ -24,7 +24,6 @@
             }
                 
         }
-        console.log(layer)
         hidden = (hidden == 'hidden')?'': 'hidden'        
     }
     function errorCallback() {
