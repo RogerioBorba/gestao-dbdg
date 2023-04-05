@@ -16,6 +16,7 @@
     let bgColorBtnAdd = "bg-gray-50";
     let colorBtnSearch ="text-gray-100";
     let bgColorBtnSearch = "bg-gray-200";
+    
     let disableButtonRealizarRequest = true;
     let arrWMSLayers = [];
     let qtdRequest = 0;
@@ -58,8 +59,11 @@
     }
 
     async function btnSearchClicked() {
-        
-        //selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
+        if(keywords.length == 0)
+            return alert("Por favor, incluir pelo menos uma palavra chave esta pesquisa");
+        if (selectedItems.length == 0)
+        return alert("Por favor, escolha pelo menos uma instituição esta pesquisa");     
+            //selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
         let promisesCapabilityObject = selectedItems.map((idTextIRI) => {return capabilityObject(idTextIRI)})
         await Promise.all(promisesCapabilityObject).then( ).catch((error) => {console.error(error.message);});
         if (arrWMSLayers.length == 0)
@@ -67,14 +71,25 @@
         
     }
 
-    $: if (selectedItems.length > 0) {
-            colorBtnAdd ="green"
-            bgColorBtnAdd = "bg-gray-300"
-            disableButtonRealizarRequest = false
+    $: if (keyword.length > 2 ) {
+        colorBtnAdd ="green";
+        bgColorBtnAdd = "bg-gray-300";
+
+    } else {
+
+        colorBtnAdd ="gray";
+        bgColorBtnAdd = "bg-gray-50";
+    }
+    $: if (selectedItems.length > 0 && keywords.length > 0 ) {
+            bgColorBtnSearch = "bg-gray-300";
+            bgColorBtnSearch = "bg-gray-200";
+            disableButtonRealizarRequest = false;
+            colorBtnSearch = "#111827";
         } else {
-            colorBtnAdd ="gray"
-            bgColorBtnAdd = "bg-gray-50"
-            disableButtonRealizarRequest = true
+            colorBtnSearch = "#E5E7EB";
+            disableButtonRealizarRequest = true;
+            bgColorBtnSearch = "bg-gray-50";
+            
         }
 
 </script>

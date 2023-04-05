@@ -409,7 +409,7 @@ export const catalogos_servicos = [
         "cswGetCapabilities": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
     },
     {
-        "descricao": "IBGE - Instituto Brasileiro de Geografia e Estatística - CREN",
+        "descricao": "IBGE - Instituto Brasileiro de Geografia e Estatística - CMA",
         "sigla": "IBGE",
         "url": "https://geoservicos.ibge.gov.br/geoserver/ows",
         "wmsAvailable": true,

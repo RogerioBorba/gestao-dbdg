@@ -220,4 +220,10 @@ export class WMSLayer {
             
         return null
     }
+    layers() {
+        let wmsLayers = this.wmsLayerCapability['Layer'];
+        if (!wmsLayers)
+            return []
+        return wmsLayers.map(layer => new WMSLayer(layer, WMSLayer.inc++, null)); 
+    }
 }
