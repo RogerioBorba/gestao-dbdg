@@ -18,7 +18,7 @@
         if (!current)
             return
         console.log(current)
-        let layerObjects = await current.layerObjects()
+        let layerObjects = await current.layersFromTree()
         wmsLayers = layerObjects.map( each => {return new WMSLayer(each, i++ , null)})
     })
      

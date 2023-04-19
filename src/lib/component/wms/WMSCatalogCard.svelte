@@ -29,9 +29,9 @@
         if (!wmsCapabilities) {
             return 
         }
-        qtdCamada = wmsCapabilities.lenLayerObjects() || 0
-        qtdCamadaSemMetadadosAssociado = wmsCapabilities.lenLayerObjectsWithoutMetadata() || 0 
-        qtdCamadaSemPalavraChave = wmsCapabilities.lenLayerObjectsWithoutKeyword() || 0 
+        qtdCamada = wmsCapabilities.lenLayersFromTree() || 0;
+        qtdCamadaSemMetadadosAssociado = wmsCapabilities.lenLayerObjectsWithoutMetadata() || 0 ;
+        qtdCamadaSemPalavraChave = wmsCapabilities.lenLayerObjectsWithoutKeyword() || 0 ;
         
     }
    

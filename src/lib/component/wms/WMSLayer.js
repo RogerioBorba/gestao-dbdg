@@ -123,11 +123,12 @@ class LegendGraphic {
 }
 
 export class WMSLayer {
-    static inc = 0
+    static inc = 0;
     constructor(wmsLayerCapability, oid = null, sourceLayer = null) {
         this.wmsLayerCapability = wmsLayerCapability
         this.sourceLayer = sourceLayer
-        this.oid = oid?oid:WMSLayer.inc++
+        WMSLayer.inc = WMSLayer.inc + 1;
+        this.oid = oid?oid:WMSLayer.inc;
         this.styles_ = null    
     }
     
@@ -222,8 +223,12 @@ export class WMSLayer {
     }
     layers() {
         let wmsLayers = this.wmsLayerCapability['Layer'];
+        //console.log("this.wmsLayerCapability---> ", this.wmsLayerCapability);
+        //console.log("wmsLayers---> ", wmsLayers);
         if (!wmsLayers)
-            return []
-        return wmsLayers.map(layer => new WMSLayer(layer, WMSLayer.inc++, null)); 
+            return [];
+        if (Array.isArray(wmsLayers))
+            return wmsLayers.map(layer => new WMSLayer(layer, null, null)); 
+        return [wmsLayers]
     }
 }

@@ -7,6 +7,7 @@ WMS_Capabilities
         KeywordList
     Capability
 */
+import { children } from 'svelte/internal'
 import {WMSLayer} from './WMSLayer'
 
 export class WMSCapabilities {
@@ -451,6 +452,70 @@ export class WMSCapabilities {
         
     }
     
+
+    layerHasChildren(layer) {
+        if(!layer)
+            return false
+        let children = layer['Layer'];
+        
+        if(Array.isArray(children))
+            return true;
+        if (children)
+            return true;
+        return  false;
+
+    }
+
+    children(layer) {
+        let array_child = layer['Layer'];
+        if(!array_child)
+            return [];
+        if(this.layerHasChildren(layer)) {
+            array_child = layer['Layer'];
+            if(Array.isArray(array_child))
+                return array_child;
+            else
+                return [array_child];
+        }
+            
+    }
+
+    layerTreeObjects(layer) {
+     /*
+     + layer 
+        + layer
+        + layer
+            + layer
+                + layer
+                + layer
+            + layer
+        + layer
+     */
+        let layersFromTree = [];
+        
+        if (layer['Name'])
+            layersFromTree.push(layer);
+        
+        if (this.layerHasChildren(layer)) {
+            
+            let children = this.children(layer) ;
+            children.forEach(child => { layersFromTree = layersFromTree.concat(this.layerTreeObjects(child))});
+        }
+        return layersFromTree;
+
+    }
+    layersFromTree() {
+        if (!this.capabilityRequestParentLayer())
+            return null
+        return this.layerTreeObjects(this.capabilityRequestParentLayer());
+    }
+    lenLayersFromTree() {
+        const ls =  this.layersFromTree()
+        if (!ls)
+            return 0
+        return  Object.keys(ls).length
+    }
+
     layerObjects() {
         const cl =   this.capabilityRequestParentLayer()
         if (!cl)
@@ -463,7 +528,8 @@ export class WMSCapabilities {
         return lays
         
     }
-     lenLayerObjects() {
+
+    lenLayerObjects() {
         
         const ls =  this.layerObjects()
         if (!ls)
@@ -517,6 +583,18 @@ export class WMSCapabilities {
            return !layerObj['MetadataURL']
         })
         return layerObjects
+    }
+
+    layerTreeWithoutMetadata() {
+        const layers =  this.layersFromTree();
+        if (!layers)
+            return null
+        
+        const layerObjects =  layers.filter((layerObj) => {
+           return !layerObj['MetadataURL']
+        })
+        return layerObjects
+
     }
     
     allKeywords() {

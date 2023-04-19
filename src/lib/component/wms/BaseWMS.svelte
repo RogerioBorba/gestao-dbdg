@@ -2,6 +2,7 @@
     import {WMSLayer} from './WMSLayer.js'
     import WMSCapabilityLayer from './WMSCapabilityLayer.svelte';
     import WMSTreeView from './WMSTreeView.svelte';
+    import WMSTree from './WMSTree.svelte';
     import {catalogos_servicos} from '$lib/inde/CatalogoINDE';
     import { getWMSCapabilitiesObject } from './WMSCapabilitiesObject';
 	import { error } from '@sveltejs/kit';
@@ -30,15 +31,16 @@
     async function fetchListWMSLayer() {
         //const res = await fetch(selected.iri);
         let wms_capabilities =  await getWMSCapabilitiesObject(selectedIDTextIRI);
-        
         if(!wms_capabilities) throw error(500, `Não foi possível realizar a requisição: ${selectedIDTextIRI}`);
+        
         let layers = wms_capabilities.layerObjects() ;
+        //console.log("wms_capabilities.layerObjects():", wms_capabilities.layerObjects())        
+        //console.log("wms_capabilities.layerTreeObjects:", wms_capabilities.layersFromTree())
+        
         if (!layers)
-            return -1;
-        let i = 1;
-        console.log("Layers: ", layers);
-        wmsLayers = layers.map(layer => new WMSLayer(layer, i++, null));
-        console.log("wmsLayers[0] - layers: ", wmsLayers[0].layers())
+            return -1;        
+        wmsLayers = layers.map(layer => new WMSLayer(layer, null, null));
+        //console.log("wmsLayers[0] - layers: ", wmsLayers[0].layers())
         return wmsLayers.length
     }
 
@@ -70,12 +72,11 @@
 	}
 
     function onChange(value) {
-        //console.log(value)
-        //console.log(selectedIDTextIRI)
+        
     }
 
     function onClick(layer) {
-        console.log(layer);
+        console.log("Nó clicado: ", layer);
     }
 </script>
 
@@ -112,8 +113,8 @@
         {/if}    
        <input class="w-full h-8 pl-3 pr-8 text-base placeholder-gray-600 border rounded-lg focus: outline-none" hidden={wmsLayers.length == 0 ?true:false} type="text" placeholder="Digite para filtrar" bind:value={textEntered} title="Filtro">
     {#each wmsLayersFiltered as layer}
-        <WMSCapabilityLayer wmsLayer={layer} capabilitiesUrl= {selectedIDTextIRI.iri}></WMSCapabilityLayer>
-        <!--<WMSTreeView wmsLayer={layer} capabilitiesUrl= {selectedIDTextIRI.iri} onClick={onClick}></WMSTreeView>-->
+        <!--<WMSCapabilityLayer wmsLayer={layer} capabilitiesUrl= {selectedIDTextIRI.iri}></WMSCapabilityLayer>-->
+        <WMSTreeView wmsLayer={layer} capabilitiesUrl= {selectedIDTextIRI.iri} onClick={onClick}></WMSTreeView>
     {/each}    
     {:catch error}
         <p class="text-red-500 text-xl ">{error.message}</p>
