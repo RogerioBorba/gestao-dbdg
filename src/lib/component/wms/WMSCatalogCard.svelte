@@ -30,8 +30,8 @@
             return 
         }
         qtdCamada = wmsCapabilities.lenLayersFromTree() || 0;
-        qtdCamadaSemMetadadosAssociado = wmsCapabilities.lenLayerObjectsWithoutMetadata() || 0 ;
-        qtdCamadaSemPalavraChave = wmsCapabilities.lenLayerObjectsWithoutKeyword() || 0 ;
+        qtdCamadaSemMetadadosAssociado = wmsCapabilities.lenTreeLayerObjectsWithoutMetadata() || 0 ;
+        qtdCamadaSemPalavraChave = wmsCapabilities.lenTreeLayerWithoutKeyword() || 0 ;
         
     }
    

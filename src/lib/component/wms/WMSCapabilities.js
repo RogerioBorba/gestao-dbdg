@@ -492,8 +492,8 @@ export class WMSCapabilities {
         + layer
      */
         let layersFromTree = [];
-        
-        if (layer['Name'])
+        //Layer sem nome é apenas um elemento organizador, uma categoria e não um layer 
+        if (layer['Name']) 
             layersFromTree.push(layer);
         
         if (this.layerHasChildren(layer)) {
@@ -536,35 +536,8 @@ export class WMSCapabilities {
             return 0
         return  Object.keys(ls).length
     }
-    
-     layerObjectsBy(field_name, field_value) {
-        let layers_objects =  this.lenLayerObjects()
-        return  layers_objects.filter(
-            (layerObj) => { return layerObj[field_name][0] === field_value})
-    }
-     layerObjectsByName(a_name) {
-        return  this.layerObjectsBy('Name', a_name)
-    }
-     layerObjectsByTitle(a_title) {
-        return  this.layerObjectsBy('Title', a_title)
-    }
-     layerObjectsByCRS(a_crs_str) {
-        return  this.layerObjectsBy('CRS', a_crs_str)
-    }
-     lenLayersNameNotEqualTitleObjects() {
-        const layers =  this.layerObjects()
-        const filteredLayers =  layers.filter((layerObj) => {
-           return layerObj['Name'] != layerObj['Title']
-        })
-        return filteredLayers.length
-    } 
-     layersNameNotEqualTitleObjects() {
-        const layers =  this.layerObjects()
-        const filteredLayers =  layers.filter((layerObj) => {
-           return layerObj['Name'] != layerObj['Title']
-        })
-        return filteredLayers.map( layrObject => layrObject['Name'] )
-    }
+     
+     
     //A server should use one or more <MetadataURL>
      metadataURLObjects() {
         const layers =  this.layerObjects()
@@ -598,7 +571,7 @@ export class WMSCapabilities {
     }
     
     allKeywords() {
-        const layers =  this.layerObjects()
+        const layers =  this.layersFromTree()
         let arr = []
         if (!layers)
             return []
@@ -617,12 +590,29 @@ export class WMSCapabilities {
     }
 
     layerObjectsWithoutKeyword() {
-        const layers =  this.layerObjects()
+        const layers =  this.layersFromTree()
         if (!layers)
             return []
         
         const layerObjects =  layers.filter((layerObj) => {
            return !layerObj['KeywordList']
+        })
+        return layerObjects
+    }
+
+    layerTreeWithoutKeyword() {
+        const layers =  this.layersFromTree()
+        
+        if (!layers)
+            return []
+        
+        const layerObjects =  layers.filter((layerObj) => {
+           return layerObj.KeywordList == undefined ||
+                  layerObj.KeywordList == null ||
+                  layerObj.KeywordList.Keyword == undefined
+
+           
+
         })
         return layerObjects
     }
@@ -646,6 +636,13 @@ export class WMSCapabilities {
             return null
         return  layerObjects.length
     }
+    
+    lenTreeLayerObjectsWithoutMetadata() {
+        const layerObjects =  this.layerTreeWithoutMetadata()
+        if (!layerObjects)
+            return null
+        return  layerObjects.length
+    }
 
      lenMetadataURL() {
         const metadados =  this.metadataURLObjects()
@@ -657,6 +654,13 @@ export class WMSCapabilities {
 
     lenLayerObjectsWithoutKeyword() {
         const layerObjs = this.layerObjectsWithoutKeyword()
+        if (!layerObjs)
+            return 0
+        return layerObjs.length
+    }
+
+    lenTreeLayerWithoutKeyword() {
+        const layerObjs = this.layerTreeWithoutKeyword()
         if (!layerObjs)
             return 0
         return layerObjs.length
