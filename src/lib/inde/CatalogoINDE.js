@@ -422,6 +422,46 @@ export const catalogos_servicos = [
         "cswGetCapabilities": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
     },
     {
+        "descricao": "IBGE - Instituto Brasileiro de Geografia e Estatística - BDIA",
+        "sigla": "IBGE",
+        "url": "https://geoservicos.ibge.gov.br/geoserver/ows",
+        "wmsAvailable": true,
+        "wfsAvailable": true,
+        "wcsAvailable": true,
+        "wmsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/BDIA/ows?service=WMS&request=GetCapabilities",
+        "wfsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/BDIA/ows?service=wfs&request=GetCapabilities&version=1.3.0",
+        "wcsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/BDIA/ows?service=wcs&request=GetCapabilities&version=1.3.0",
+        "url_metadados": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge",
+        "cswGetCapabilities": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
+    },
+    {
+        "descricao": "IBGE - Instituto Brasileiro de Geografia e Estatística - PNADC",
+        "sigla": "IBGE",
+        "url": "https://geoservicos.ibge.gov.br/geoserver/ows",
+        "wmsAvailable": true,
+        "wfsAvailable": true,
+        "wcsAvailable": true,
+        "wmsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/PNADC/ows?service=WMS&request=GetCapabilities",
+        "wfsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/PNADC/ows?service=wfs&request=GetCapabilities&version=1.3.0",
+        "wcsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/PNADC/ows?service=wcs&request=GetCapabilities&version=1.3.0",
+        "url_metadados": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge",
+        "cswGetCapabilities": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
+    },
+    
+    {
+        "descricao": "IBGE - Objetivos de Desenvolvimento Sustentável - ODS",
+        "sigla": "IBGE/ODS",
+        "url": "https://geoservicos.ibge.gov.br/geoserver/ODS/ows",
+        "wmsAvailable": true,
+        "wfsAvailable": true,
+        "wcsAvailable": true,
+        "wmsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/ODS/ows?service=wms&request=GetCapabilities&version=1.3.0",
+        "wfsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/ODS/ows?service=wfs&request=GetCapabilities&version=1.3.0",
+        "wcsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/ODS/ows?service=wcs&request=GetCapabilities&version=1.3.0",
+        "url_metadados": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge",
+        "cswGetCapabilities": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
+        },
+    {
     "descricao": "ICA - Instituto de Cartografia Aeronáutica ",
     "sigla": "ICA",
     "url": "http://geoaisweb.decea.gov.br/geoserver/ICA/ows",
@@ -525,6 +565,7 @@ export const catalogos_servicos = [
     },
     {
         "descricao": "MB/PEM - Planejamento Espacial Marinho",
+        "sigla": "MB/PEM",
         "url": "https://geoservicos.inde.gov.br/geoserver/PEM/ows",
         "wmsAvailable": true,
         "wfsAvailable": false,
@@ -562,6 +603,19 @@ export const catalogos_servicos = [
     "cswGetCapabilities": "https://metadados.inde.gov.br/geonetwork/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
     },
     {
+        "descricao": "MDR/SEDEC - Secretaria Nacional de Proteção e Defesa Civil",
+        "sigla": "MDR/SEDEC",    
+        "url": "http://geoserver.mdr.gov.br/geoserver/ows",
+        "wmsAvailable": true,
+        "wfsAvailable": true,
+        "wcsAvailable": true,
+        "wmsGetCapabilities": "http://geoserver.mdr.gov.br/geoserver/ows?service=wms&request=GetCapabilities&version=1.3.0",
+        "wfsGetCapabilities": "http://geoserver.mdr.gov.br/geoserver/ows?service=wfs&request=GetCapabilities&version=1.3.0",
+        "wcsGetCapabilities": "http://geoserver.mdr.gov.br/geoserver/ows?service=wcs&request=GetCapabilities&version=1.3.0",
+        "url_metadados": null,
+        "cswGetCapabilities": null
+    },
+    {
     "descricao": "MP - Ministério de Planejamento, Desenvolvimento e Gestão ",
     "sigla": "MP",
     "url": "https://geoservicos.inde.gov.br/geoserver/MPOG/ows",
@@ -588,17 +642,24 @@ export const catalogos_servicos = [
         "cswGetCapabilities": "https://metadados.inde.gov.br/geonetwork/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
     },
     {
-    "descricao": "IBGE - Objetivos de Desenvolvimento Sustentável - ODS",
-    "sigla": "IBGE/ODS",
-    "url": "https://geoservicos.ibge.gov.br/geoserver/ODS/ows",
-    "wmsAvailable": true,
-    "wfsAvailable": true,
-    "wcsAvailable": true,
-    "wmsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/ODS/ows?service=wms&request=GetCapabilities&version=1.3.0",
-    "wfsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/ODS/ows?service=wfs&request=GetCapabilities&version=1.3.0",
-    "wcsGetCapabilities": "https://geoservicos.ibge.gov.br/geoserver/ODS/ows?service=wcs&request=GetCapabilities&version=1.3.0",
-    "url_metadados": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge",
-    "cswGetCapabilities": "https://metadadosgeo.ibge.gov.br/geonetwork_ibge/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
+        "descricao": "Prefeitura do Município de São Paulo (SP) - vetor",
+        "url": "http://wms.geosampa.prefeitura.sp.gov.br/geoserver/geoportal/wms ",
+        "wmsAvailable": true,
+        "wfsAvailable": false,
+        "wcsAvailable": false,
+        "wmsGetCapabilities": "http://wms.geosampa.prefeitura.sp.gov.br/geoserver/geoportal/wms ?service=wms&request=GetCapabilities&version=1.3.0",
+        "wfsGetCapabilities": null,
+        "wcsGetCapabilities": null
+    },
+    {
+        "descricao": "Prefeitura do Município de São Paulo (SP) - raster",
+        "url": "http://raster.geosampa.prefeitura.sp.gov.br/geoserver/geoportal/ows",
+        "wmsAvailable": true,
+        "wfsAvailable": false,
+        "wcsAvailable": false,
+        "wmsGetCapabilities": "http://raster.geosampa.prefeitura.sp.gov.br/geoserver/geoportal/ows?service=wms&request=GetCapabilities&version=1.3.0",
+        "wfsGetCapabilities": null,
+        "wcsGetCapabilities": null
     },
     {
     "descricao": "SFB - Serviço Florestal do Brasil",
@@ -857,8 +918,8 @@ export const catalogos_servicos = [
         "url_metadados": "https://metadados.inde.gov.br/geonetwork",
         "cswGetCapabilities": "https://metadados.inde.gov.br/geonetwork/srv/por/csw?service=CSW&version=2.0.2&request=GetCapabilities"
     }
-    ]
-    
+    ];
+    export const catalogosWMSCapabilities =  catalogos_servicos.map((catalogo) => { return catalogo.wmsGetCapabilities});
     
     export const catalogos_csw = [
         {

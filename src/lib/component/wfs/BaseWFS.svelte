@@ -1,48 +1,46 @@
 <script>
-    import {WMSLayer} from './WMSLayer.js'
-    import WMSCapabilityLayer from './WMSCapabilityLayer.svelte';
-    import WMSTreeView from './WMSTreeView.svelte';
-    import WMSTree from './WMSTree.svelte';
+    
     import {catalogos_servicos} from '$lib/inde/CatalogoINDE';
-    import { getWMSCapabilitiesObject } from './WMSCapabilitiesObject';
+    import { getWFSCapabilitiesObject } from './WFSCapabilitiesObject.js';
+
 	import { error } from '@sveltejs/kit';
-    let promise = null
-    let firstIDTextIRIObj = { id: 1, text: "Escolha um catálogo", iri: '' }
+    import { WFSLayer } from './WFSLayer.js';
+    import WFSCapabilityLayer from './WFSCapabilityLayer.svelte';
+    let promise = null;
+    let firstIDTextIRIObj = { id: 1, text: "Escolha um catálogo", iri: '' };
+
     let selectedIDTextIRI =  firstIDTextIRIObj
 	let i = 1
     function newIRI(obj) {
-        return { id: i++, text: obj.descricao, iri: obj.wmsGetCapabilities }
+        if(!obj.wfsGetCapabilities)
+            return null
+        return { id: i++, text: obj.descricao, iri: obj.wfsGetCapabilities }
     }
-    let iriArray = [selectedIDTextIRI ].concat(catalogos_servicos.map( (obj) =>  newIRI(obj)))
-    let wmsLayers = []
+
+    let iriArray = [selectedIDTextIRI ].concat(catalogos_servicos.map( (obj) =>  newIRI(obj)).filter((obj)=> obj != null ));
+    let wfsLayers = [];
 	let answer = '';
-    let textEntered = ""
-    let wmsLayersFiltered = []
+    let textEntered = "";
+    let wfsLayersFiltered = [];
     $ : {
             if (textEntered && textEntered.length >= 3) {
-                wmsLayersFiltered = wmsLayers.filter(
-                    wms_layer => wms_layer.title().toLowerCase().includes(textEntered.toLowerCase()))
+                wfsLayersFiltered = wfsLayers.filter(
+                    wfs_layer => wfs_layer.title().toLowerCase().includes(textEntered.toLowerCase()))
             }
             else {
-                wmsLayersFiltered = [...wmsLayers]
+                wfsLayersFiltered = [...wfsLayers]
             }
     }
     
-    async function fetchListWMSLayer() {
-        //const res = await fetch(selected.iri);
-        let wms_capabilities =  await getWMSCapabilitiesObject(selectedIDTextIRI);
+    async function fetchListWFSLayer() {
+        let wfs_capabilities =  await getWFSCapabilitiesObject(selectedIDTextIRI);
         
-        if(!wms_capabilities) throw error(500, `Não foi possível realizar a requisição: ${selectedIDTextIRI}`);
-        
-        let layers = wms_capabilities.layerObjects() ;
-        //console.log("wms_capabilities.layerObjects():", wms_capabilities.layerObjects())        
-        //console.log("wms_capabilities.layerTreeObjects:", wms_capabilities.layersFromTree())
-        
-        if (!layers)
+        if(!wfs_capabilities) throw error(500, `Não foi possível realizar a requisição: ${selectedIDTextIRI}`);
+        let featuresFromCapability = wfs_capabilities.features();
+        if (!featuresFromCapability)
             return -1;        
-        wmsLayers = layers.map(layer => new WMSLayer(layer, null, null));
-        //console.log("wmsLayers[0] - layers: ", wmsLayers[0].layers())
-        return wmsLayers.length
+        wfsLayers = featuresFromCapability.map(layerCapability => new WFSLayer(layerCapability));
+        return wfsLayers.length
     }
 
     async function btnSearchClicked() {
@@ -52,7 +50,8 @@
             return 
         }  
         try {
-            promise = fetchListWMSLayer()            
+            promise = fetchListWFSLayer()   
+                    
         } catch (error) {
             promise = 1
             throw error
@@ -61,11 +60,11 @@
     }
 
     function btnClearClicked() {
-        selectedIDTextIRI = firstIDTextIRIObj
-        promise = 1
-        wmsLayers = []
-        wmsLayersFiltered = []
-        textEntered = ""   
+        selectedIDTextIRI = firstIDTextIRIObj;
+        promise = 1;
+        wfsLayers = [];
+        wfsLayersFiltered = [];
+        textEntered = ""   ;
     }
 
 	function handleSubmit() {
@@ -82,17 +81,17 @@
 </script>
 
 
-<form class="relative " on:submit|preventDefault={handleSubmit}>
-	<select class="shadow-sm text-sm w-full rounded-lg bg-white border-gray-300 focus:outline-none text-gray-500" bind:value={selectedIDTextIRI} on:change={onChange}>
+<form class="relative m-0" on:submit|preventDefault={handleSubmit}>
+	<select class="shadow-sm p-2 text-sm w-full rounded-lg bg-white border-gray-300 focus:outline-none text-gray-500"
+     bind:value={selectedIDTextIRI} on:change={onChange}>
 		{#each iriArray as iri}
 			<option value={iri}>
 				{iri.text}
 			</option>
 		{/each}
 	</select>
-    
     <div class="flex mt-4 relative text-gray-700">
-        <input class="w-full pl-3 pr-8 text-sm shadow-sm border-gray-300 rounded-lg focus:outline-none" placeholder="URL WMS GetCapabilities" type="text" bind:value={selectedIDTextIRI.iri} title={selectedIDTextIRI.iri}>
+        <input class="w-full p-2 text-sm shadow-sm border-gray-300 rounded-lg focus:outline-none" placeholder="URL WMS GetCapabilities" type="text" bind:value={selectedIDTextIRI.iri} title={selectedIDTextIRI.iri}>
         <button class="focus:outline-none bg-grey-light hover:bg-grey text-grey-darkest font-bold px-1 rounded inline-flex items-center hover:bg-gray-200" 
                 on:click|preventDefault={btnSearchClicked} title="Buscar camadas">
             <svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="20" height="20" viewBox="0 0 24 24"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
@@ -106,16 +105,19 @@
     </div> 
     {#await promise}
         <p class = "text-xl text-center text-blue-600 animate-pulse">...aguarde</p>
-    {:then layers}
-       {#if layers == 0}
+    {:then layersLenth}
+       {#if layersLenth == 0}
             <p class="text-blue-800 text-lg p-1">Não há camadas!</p>
-        {:else if layers == -1}
+        {:else if layersLenth == -1}
         <p class="text-red-800 text-lg p-1">Problema no xml retornado do GetCapabilities</p>
         {/if}    
-       <input class="w-full h-8 pl-3 pr-8 text-base placeholder-gray-600 border rounded-lg focus: outline-none" hidden={wmsLayers.length == 0 ?true:false} type="text" placeholder="Digite para filtrar" bind:value={textEntered} title="Filtro">
-    {#each wmsLayersFiltered as layer}
+       <input class="w-full h-8 pl-3 pr-8 text-base placeholder-gray-600 border rounded-lg focus: outline-none" 
+       hidden={wfsLayers.length == 0 ?true:false} type="text" placeholder="Digite para filtrar" 
+       bind:value={textEntered} title="Filtro">
+    {#each wfsLayersFiltered as layer}
         <!--<WMSCapabilityLayer wmsLayer={layer} capabilitiesUrl= {selectedIDTextIRI.iri}></WMSCapabilityLayer>-->
-        <WMSTreeView wmsLayer={layer} capabilitiesUrl= {selectedIDTextIRI.iri} onClick={onClick}></WMSTreeView>
+        <WFSCapabilityLayer wfsLayer={layer} capabilitiesUrl= {selectedIDTextIRI.iri}></WFSCapabilityLayer>
+        
     {/each}    
     {:catch error}
         <p class="text-red-500 text-xl ">{error.message}</p>

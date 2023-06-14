@@ -1,18 +1,24 @@
 import { error } from '@sveltejs/kit';
+import {catalogosWMSCapabilities} from '$lib/inde/CatalogoINDE.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({url}) {
     
-
+    
     const an_url = url.search.substring(5);
+    
     if (!an_url) throw error(400, 'O parâmetro url não consta na requisição');
     try {
-        const response = await fetch(an_url, { method: "GET",  headers: {"Content-type": 'application/xml'}})
+        if (catalogosWMSCapabilities.includes(an_url))
+            process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
+        const response = await fetch(an_url, { method: "GET",  headers: {"Content-type": 'application/xml'}});
         if(!response.ok) throw error(500, `O servidor não conseguiu responder adequadamente a requisição ${an_url}`);
-        const content = await response.text()
+        const content = await response.text();
         return new Response(content, {status: 200, headers: {'content-type': 'application/xml'}});
         
     } catch (erro) {
+        console.log("erro11111: ", erro.code);
         throw erro
     }
    

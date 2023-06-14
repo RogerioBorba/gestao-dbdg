@@ -11,6 +11,7 @@ export async function GET(event) {
         return json(content)
         //return new Response(JSON.stringify(content), {status: 200, headers: {'content-type': 'application/json'}});   
     } catch (erro) {
+        
         throw erro
     }
 }
