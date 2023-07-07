@@ -960,8 +960,8 @@ export const catalogos_servicos = [
         {
             "descricao": "CENSIPAM - Centro Gestor e Operacional do Sistema de Proteção da Amazônia",  
             "sigla": "CENSIPAM",
-            "url": "http://panorama.sipam.gov.br/geonetwork/",
-            "cswGetCapabilities": "http://panorama.sipam.gov.br/geonetwork/srv/eng/csw?service=CSW&version=2.0.2&request=GetCapabilities",
+            "url": "https://panorama.sipam.gov.br/geonetwork/",
+            "cswGetCapabilities": "https://panorama.sipam.gov.br/geonetwork/srv/eng/csw?service=CSW&version=2.0.2&request=GetCapabilities",
             "noCentralCategoria": null
         },
         {

@@ -1,7 +1,7 @@
 <script>
     import {catalogos_servicos} from '$lib/inde/CatalogoINDE'
     import { Radio } from 'flowbite-svelte'
-    import {getWMSCapabilitiesObject} from '$lib/component/wms/WMSCapabilitiesObject'
+    import {getWMSCapabilitiesObject} from '$lib/component/wms/GetWMSCapabilities'
     import { Progressbar } from 'flowbite-svelte'
     import WMSCapabilityLayer from './WMSCapabilityLayer.svelte'
 	import { currentListWMSCapability } from '$lib/store/storeWMS';

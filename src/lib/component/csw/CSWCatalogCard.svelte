@@ -1,5 +1,5 @@
 <script>
-    import {countMetadata, countProcessado, postURL} from '$lib/store/storeMetadata'
+    import {countMetadata, countProcessado, postURL, totalMetadata} from '$lib/store/storeMetadata'
     import { Spinner} from 'flowbite-svelte';
     import { goto } from '$app/navigation';
     import { fade } from 'svelte/transition'
@@ -13,11 +13,46 @@
     let getRecordsParams = 'service=CSW&version=2.0.2&request=GetRecords&typeNames=csw:Record&constraintLanguage=CQL_TEXT&ElementSetName=brief&resultType=hits'
     let qtdSelectedItem = 0
     let qtdMetadados = 0
+    let qtdMetadadosComWMS = 0
+    let qtdMetadadosComWFS = 0
     let bgColor = 'bg-gray-200'  
     let spinHidden = ''
     let spinMessage = 'processando ...'
     let requestGetRecordsTextOrError = ''
+    //protocolo => OGC:WMS | OGC:WFS | etc 
+    function urlWithParametersOGCService(url, protocolo) {
+        let paramStr = ''
+        if (idDescricaoIriNoCentralCategoria.noCentralCategoria)
+            paramStr =`service=CSW&version=2.0.2&request=GetRecords&typeNames=csw:Record&constraintLanguage=FILTER&CONSTRAINT_LANGUAGE_VERSION=1.1.0&constraint=<Filter xmlns="http://www.opengis.net/ogc"><And><PropertyIsEqualTo><PropertyName>protocol</PropertyName><Literal>${protocolo}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>_cat</PropertyName><Literal>${idDescricaoIriNoCentralCategoria.noCentralCategoria}</Literal></PropertyIsEqualTo></And></Filter>`
+        else
+            paramStr = `service=CSW&version=2.0.2&request=GetRecords&typeNames=csw:Record&constraintLanguage=FILTER&CONSTRAINT_LANGUAGE_VERSION=1.1.0&constraint=<Filter xmlns="http://www.opengis.net/ogc"><PropertyIsEqualTo><PropertyName>protocol</PropertyName><Literal>${protocolo}</Literal></PropertyIsEqualTo></Filter>`
+        return `${url}?${paramStr}`
+    }
     
+    function getURL(iri) {
+        //iri = https://metadados.snirh.gov.br/geonetwork/srv/eng/csw?service=CSW&version=2.0.2&request=GetCapabilities
+        const indexOfQuestionMark = iri.indexOf('?')
+        if (indexOfQuestionMark == -1)
+            return iri
+        return iri.substring(0, indexOfQuestionMark );
+    }
+
+    async function getResultProtocol(protocolo) {
+        try {
+            let url = getURL(idDescricaoIriNoCentralCategoria.iri)
+            let urlProtocolo = urlWithParametersOGCService(url, protocolo);
+            let res = await fetchData(urlProtocolo)
+            let xmlText = await res.text();
+            let xmlJsonObject = textXml2Json(xmlText);
+            //console.log("xmlJsonObject: ", xmlJsonObject)
+            return xmlJsonObject["csw:GetRecordsResponse"]["csw:SearchResults"]["@attributes"].numberOfRecordsMatched    
+        } catch (error) {
+            console.log("error em CSWCatalogCard>>>getResult(protocolo)")
+            console.log(error)
+        }
+        
+    }
+
     function getBody() {
         return idDescricaoIriNoCentralCategoria.noCentralCategoria?postRecordsParams:postBody 
 
@@ -28,7 +63,7 @@
         let body = getBody()
         str = str.substring(0, str.indexOf('?'))
         $postURL = {url: str , body: body}
-    
+        totalMetadata.set(qtdMetadados)
         goto('/csw/metadados')
     }
 
@@ -39,6 +74,8 @@
         try {
             let res
             if(idDescricaoIriNoCentralCategoria.noCentralCategoria) {
+                console.log(postRecordsParams)
+                console.log(url)
                 res = await fetchDataByPost(url, postRecordsParams,'application/xml')
                 
             } else {
@@ -49,6 +86,8 @@
             let xmlJsonObject = textXml2Json(xmlText)
             //console.log(xmlJsonObject)
             qtdMetadados = xmlJsonObject["csw:GetRecordsResponse"]["csw:SearchResults"]["@attributes"]["numberOfRecordsMatched"]
+            qtdMetadadosComWMS = await getResultProtocol('OGC:WMS')
+            qtdMetadadosComWFS = await getResultProtocol('OGC:WFS')
             $countProcessado = $countProcessado + 1
             if(qtdMetadados && !isNaN(parseInt(qtdMetadados)))
                 $countMetadata = $countMetadata + parseInt(qtdMetadados)
@@ -71,6 +110,8 @@
         <h2 class="font-semibold"> {requestGetRecordsTextOrError}</h2>
         <h2 class="font-semibold"> {idDescricaoIriNoCentralCategoria.descricao}</h2>
         <h2> Quantidade de registros de metadados: {qtdMetadados}</h2>
+        <h2> Quantidade de registros de metadados com WMS: {qtdMetadadosComWMS}</h2>
+        <h2> Quantidade de registros de metadados com WFS: {qtdMetadadosComWFS}</h2>
         <button class="text-green-600 text-left font-semibold hover:bg-gray-200 hover:underline py-1"  
         on:click={linkClicked}>Mais detalhes</button>
         <!--<a class="text-xs text-blue-500 underline underline-offset-4 uppercase" href="{metadadoAssociado()}">{metadadoText}</a>-->

@@ -1,9 +1,8 @@
 <script>
     import {catalogos_servicos} from '$lib/inde/CatalogoINDE'
-    import {getWMSCapabilitiesObject} from '$lib/component/wms/WMSCapabilitiesObject'
+    import {getWMSCapabilitiesObject} from '$lib/component/wms/GetWMSCapabilities'
     import { Progressbar } from 'flowbite-svelte'
     import WMSCapabilityLayer from './WMSCapabilityLayer.svelte'
-	import { currentListWMSCapability } from '$lib/store/storeWMS';
     let checked;
     let progress = 0;
     let selectedItems = [];
@@ -37,6 +36,7 @@
             return console.log(`A requisição ${idTextIRI} falhou.`)
         let arrLayers = wmsCapabilities.wmsLayersFilteredByNameOrTitle(nameTile, idTextIRI.iri)
         arrWMSLayers  = arrWMSLayers.concat(arrLayers)
+        //console.log(arrWMSLayers)
         
     }
 
@@ -101,7 +101,7 @@
     </div>    
     <Progressbar progress={progress} size="h-1.5" />
     <p class = "w-full text-sm text-center truncate text-blue-600 animate-pulse">{instituicaoText}</p>
-    {#each arrWMSLayers as layer, index}
+    {#each arrWMSLayers as layer, index (index)}
         
         <WMSCapabilityLayer wmsLayer={layer} capabilitiesUrl= {layer.sourceLayer}></WMSCapabilityLayer>
     {/each}    

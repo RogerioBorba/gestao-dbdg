@@ -1,27 +1,7 @@
+import { BaseLayer } from "../base/BaseLayer"
+import {MetadataURL} from '$lib/component/ogc_commom/metadataURL.js';
 function nodeValue(node) {
     return node['#text'] || node['#cdata-section']
-}
-class MetadataURL {
-    constructor(metadataObject) {
-        this.metadataObject = metadataObject
-    }
-    
-    type() {
-        return this.metadataObject['@attributes']['type']
-    }
-
-    contentType() {
-        return nodeValue(this.metadataObject['Format'])
-    }
-
-    link() {
-        return this.metadataObject['OnlineResource']['@attributes']['xlink:href']
-    }
-
-    linkType() {
-        return this.metadataObject['OnlineResource']['@attributes']['xlink:type']
-    }
-
 }
 
 class EXGeographicBoundingBox{
@@ -122,14 +102,15 @@ class LegendGraphic {
 
 }
 
-export class WMSLayer {
-    static inc = 0;
-    constructor(wmsLayerCapability, oid = null, sourceLayer = null) {
+export class WMSLayer extends BaseLayer {
+    
+    constructor(wmsLayerCapability, oid = null, sourceLayer = null, layer=null) {
+        super(layer);
         this.wmsLayerCapability = wmsLayerCapability
         this.sourceLayer = sourceLayer
         WMSLayer.inc = WMSLayer.inc + 1;
         this.oid = oid?oid:WMSLayer.inc;
-        this.styles_ = null    
+        this.styles_ = null;   
     }
     
     remove() {
@@ -188,7 +169,10 @@ export class WMSLayer {
             return bboxes.map(bbox => bbox['@attributes'])
         return []
     }
-    
+    extent() {
+        let bbox = this.boundingBoxes()[0]
+        return [bbox.minx, bbox.miny, bbox.maxx, bbox.maxy]
+    }
     styles(){
         if (!this.styles_) {
             let sty_arr = this.wmsLayerCapability['Style']

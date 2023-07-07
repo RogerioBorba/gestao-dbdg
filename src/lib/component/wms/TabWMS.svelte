@@ -5,7 +5,7 @@
 	import WmsSearchByPalavraChave from './WMSSearchByPalavraChave.svelte';
 </script>
     
-<Tabs style="underline">
+<Tabs style="underline" >
     <TabItem open title='Por instituição'>
         <BaseWMS></BaseWMS>
         

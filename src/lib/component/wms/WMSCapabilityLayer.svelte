@@ -1,31 +1,20 @@
 <script>
-    import {map, selectedLayers } from '$lib/store/storeMap'
-    import L from 'leaflet'
-    import { textXml2Json } from '$lib/xml-json/xml2Json';
-    import { fetchData } from '$lib/request/requestData';
+    import {facadeOL, selectedLayers } from '$lib/store/storeMap'
+    
     export let wmsLayer;
     export let capabilitiesUrl;
-    let source = null;
-    let sourceLayer = null;
-    let display = ''
-    let visibilytMetadata ='visible'
+    let display = '';
+    let visibilytMetadata ='visible';
 
     $: if (!wmsLayer.metadataURLs()) visibilytMetadata ='invisible'
       
     async function btnMetadadoClicked() {
         if (!wmsLayer.metadataURLs())
             return alert("A camada não está associada a metadados.")
-
-        let link = wmsLayer.metadataURLs()[0].link() //wmsLayer.metadataURL().link()
-        window.open(link, "_blank");
-
-        const res = await fetchData(link);
-        if (!res.ok) 
-		    throw new Error('Falha na requisição do endereço.')
-        const text = await res.text()
-        //console.log(text)
-        const textJson = textXml2Json(text)
-        // alert(textJson)   
+            wmsLayer.metadataURLs().forEach(metadataURL => {
+                let link = metadataURL.link() //wmsLayer.metadataURL().link()
+                window.open(link, "_blank");
+            });                
     }
     
     function url() {
@@ -36,14 +25,14 @@
     }
 
     function btnAddLayerClicked() {
-        let z_index = $selectedLayers.length + 1
+        let z_index = $selectedLayers.length + 1;
         if(!wmsLayer.name())
             return alert("Esta é uma camada de agrupamento. Apenas as camadas interiores podem ser exibidas!")
-        source = L.tileLayer.wms(url(), {layers: wmsLayer.name(),format: 'image/png',transparent: true, zIndex: z_index });
-        source.addTo($map)
-        wmsLayer.sourceLayer = source
-        $selectedLayers = [...$selectedLayers, wmsLayer]
-        display='hidden'
+        wmsLayer.sourceLayer = url();
+        console.log("source: ",wmsLayer );
+        $facadeOL.addWMSLayer(wmsLayer);
+        $selectedLayers = [...$selectedLayers, wmsLayer];
+        display='hidden';
     }
        
 </script>
